@@ -5,10 +5,10 @@ import time
 import psutil
 from urllib2 import urlopen
 my_ip = urlopen('http://ip.42.pl/raw').read()
+print("my_ip ", my_ip);
 
 sender = 'yogesh.rathod@loylty.in'
-# , 'hardik.patel@loylty.in'
-receivers = ['yogesh.rathod@loylty.in']
+receivers = ['yogesh.rathod@loylty.in', 'hardik.patel@loylty.in', 'rahul.lamkhade@loylty.com', 'sachin.kurkute@loylty.in', 'vikrant.gharat@loylty.in']
 message = Message(From=sender, To=receivers)
 message.Subject = "An HTML Email"
 
