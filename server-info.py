@@ -4,8 +4,14 @@ import schedule
 import time
 import psutil
 from urllib2 import urlopen
-my_ip = urlopen('http://ip.42.pl/raw').read()
-print("my_ip ", my_ip);
+myPublicIP = urlopen('http://ip.42.pl/raw').read()
+
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+myPrivateIP = s.getsockname()[0] if s.getsockname() and s.getsockname()[0] else myPublicIP
+print("myPrivateIP ", myPrivateIP);
+s.close()
 
 sender = 'yogesh.rathod@loylty.in'
 receivers = ['yogesh.rathod@loylty.in', 'hardik.patel@loylty.in', 'rahul.lamkhade@loylty.com', 'sachin.kurkute@loylty.in', 'vikrant.gharat@loylty.in']
@@ -13,12 +19,12 @@ message = Message(From=sender, To=receivers)
 message.Subject = "An HTML Email"
 
 memoryInfo = dict(psutil.disk_usage("/")._asdict()) if psutil.disk_usage("/") else {'used': 'N.A.', 'total': 'N.A.', 'percent': 'N.A.', 'free': 'N.A.'}
-print("memoryInfo ", memoryInfo);
+# print("memoryInfo ", memoryInfo);
 powerInfo = dict(psutil.sensors_battery()._asdict()) if psutil.sensors_battery() else {'percent': 'N.A.', 'secsleft': 'N.A.', 'power_plugged': 'N.A.'}
-print("powerInfo ", powerInfo);
+# print("powerInfo ", powerInfo);
 temperatures = psutil.sensors_temperatures()
 temperaturesObj = dict(temperatures['acpitz'][0]._asdict()) if temperatures and temperatures['acpitz'][0] else {'current': 'N.A.', 'high': 'N.A.', 'critical': 'N.A.', 'label': ''}
-print("temperaturesObj ", temperaturesObj);
+# print("temperaturesObj ", temperaturesObj);
 
 message.Html = """
     <p>Hi!<br>
@@ -87,7 +93,7 @@ message.Html = """
             </table>
         </body>
         </html>
-    """.format(my_ip, memoryInfo['used'], memoryInfo['total'], memoryInfo['free'], memoryInfo['percent'], powerInfo['percent'],  powerInfo['secsleft'], powerInfo['power_plugged'], temperaturesObj['current'], temperaturesObj['high'], temperaturesObj['critical'])
+    """.format(myPrivateIP, memoryInfo['used'], memoryInfo['total'], memoryInfo['free'], memoryInfo['percent'], powerInfo['percent'],  powerInfo['secsleft'], powerInfo['power_plugged'], temperaturesObj['current'], temperaturesObj['high'], temperaturesObj['critical'])
 
 
 
